@@ -1,0 +1,7 @@
+<!-- Start Marvelmind Dashboard API node so you can run setup_marvelmind_env.py.
+     Requires libdashapi.so from Marvelmind (see README). -->
+<launch>
+  <arg name="hedge_port" default="/dev/serial/by-id/usb-Marvelmind_Robotics_STM32_Virtual_ComPort_2088339D5246-if00"/>
+  <node pkg="marvelmind_nav" type="marvelmind_api_ros" name="marvelmind_api_ros" output="screen"
+        args="$(arg hedge_port)"/>
+</launch>

@@ -1,0 +1,29 @@
+<launch>
+  <!-- Real Marvelmind receiver (your 1 drone) -->
+  <arg name="hedge_port" default="/dev/ttyACM1"/>
+  <arg name="hedge_baud" default="9600"/>
+
+  <node pkg="marvelmind_nav" type="hedge_rcv_bin" name="hedge_rcv_bin" output="screen"
+        args="$(arg hedge_port) $(arg hedge_baud)"/>
+
+  <!-- Dummy drone: same topic as real so fleet node sees both. Change position/angle in launch or with rosparam set -->
+  <node pkg="hedge_heading_to_master" type="dummy_hedge_publisher.py" name="dummy_hedge_publisher" output="screen">
+    <param name="topic" value="/hedge_pos_ang"/>
+    <param name="rate" value="10"/>
+    <param name="address" value="99"/>
+    <param name="x_m" value="2.0"/>
+    <param name="y_m" value="0.0"/>
+    <param name="z_m" value="0.0"/>
+    <param name="angle_deg" value="45.0"/>
+  </node>
+
+  <!-- Fleet heading + distances (real joint + dummy 99). Dummy position/angle: rosparam set /dummy_hedge_publisher/x_m etc. -->
+  <node pkg="hedge_heading_to_master" type="hedge_heading_distances_node.py" name="hedge_heading_distances_node" output="screen">
+    <param name="hedge_pos_ang_topic" value="/hedge_pos_ang"/>
+    <param name="fleet_heading_distances_topic" value="fleet_heading_distances"/>
+    <param name="publish_rate" value="10"/>
+    <param name="frame_id" value="marvelmind"/>
+    <!-- <param name="primary_hedge_address" value="22"/> -->
+    <param name="dummy_address" value="99"/>
+  </node>
+</launch>

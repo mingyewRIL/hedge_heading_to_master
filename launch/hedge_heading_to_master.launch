@@ -1,0 +1,18 @@
+<launch>
+  <!-- Marvelmind hedge receiver: publish /hedge_pos_ang (set port and baud if needed) -->
+  <arg name="hedge_port" default="/dev/ttyACM1"/>
+  <arg name="hedge_baud" default="9600"/>
+
+  <node pkg="marvelmind_nav" type="hedge_rcv_bin" name="hedge_rcv_bin" output="screen"
+        args="$(arg hedge_port) $(arg hedge_baud)"/>
+
+  <!-- This package: subscribe /hedge_pos_ang, publish fleet heading + distances -->
+  <!-- primary_hedge_address: use only this address (e.g. 13 = Marvelmind joint X,Y,Angle); -1 = use all -->
+  <node pkg="hedge_heading_to_master" type="hedge_heading_distances_node.py" name="hedge_heading_distances_node" output="screen">
+    <param name="hedge_pos_ang_topic" value="/hedge_pos_ang"/>
+    <param name="fleet_heading_distances_topic" value="fleet_heading_distances"/>
+    <param name="publish_rate" value="10"/>
+    <param name="frame_id" value="marvelmind"/>
+    <param name="primary_hedge_address" value="13"/>
+  </node>
+</launch>

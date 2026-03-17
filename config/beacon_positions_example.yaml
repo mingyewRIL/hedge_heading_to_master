@@ -1,0 +1,28 @@
+# Example beacon positions for Marvelmind API setup.
+# Use this with setup_marvelmind_env.py to set stationary and hedgehog positions
+# without the Dashboard. Positions in millimeters (x_mm, y_mm, z_mm).
+#
+# Get libdashapi.so from Marvelmind (Dashboard API). Run marvelmind_api_ros
+# with your modem port, then run the setup script.
+
+# Stationary beacons (e.g. your fixed beacons in the room)
+stationary_beacons:
+  - address: 11
+    x_mm: 0
+    y_mm: 0ee
+    z_mm: 0
+  - address: 12
+    x_mm: 2000
+    y_mm: 0
+    z_mm: 0
+
+# Hedgehog (mobile) beacons - initial positions if you want to set them via API
+# hedgehog_beacons:
+#   - address: 21
+#     x_mm: 500
+#     y_mm: 500
+#     z_mm: 0
+#   - address: 22
+#     x_mm: 600
+#     y_mm: 500
+#     z_mm: 0
