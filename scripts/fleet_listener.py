@@ -5,32 +5,36 @@ import rospy
 # (Assuming your package is still named 'hedge_heading_to_master')
 from hedge_heading_to_master.msg import FleetHeadingDistances
 
+# Set this to the ID of the drone this script is running on
+drone_ID = 2
+
 def fleet_callback(msg):
     """
     This function runs every time a new message arrives on the topic.
     """
-    # Print the timestamp just to show we received a new packet
-    rospy.loginfo(f"--- New Fleet Data Received (Seq: {msg.header.seq}) ---")
-
     # 1. Loop through every drone reporting its status
     for drone in msg.drones:
-        my_address = drone.address
         
-        # 2. Loop through all the 'target' drones it is looking at
-        # We use enumerate/range to grab the matching index for distance and heading
-        for i in range(len(drone.other_addresses)):
-            target_address = drone.other_addresses[i]
-            distance = drone.distances_to_others[i]
-            heading_error = drone.heading_error_to_others_deg[i]
+        # 2. Check if this data block belongs to THIS specific drone
+        if drone.address == drone_ID:
+            target_list = []
+            
+            # 3. Build the clean array for our targets
+            for i in range(len(drone.other_addresses)):
+                target_address = drone.other_addresses[i]
+                distance = round(drone.distances_to_others[i], 3)
+                heading_error = round(drone.heading_error_to_others_deg[i], 3)
 
-            # Print or use the data!
-            rospy.loginfo(f"[Drone {my_address}] relative to [Drone {target_address}]:")
-            rospy.loginfo(f"    -> Distance: {distance} m")
-            rospy.loginfo(f"    -> Turn Error: {heading_error} deg")
+                target_list.append([target_address, distance, heading_error])
+
+            # 4. Print EXACTLY the array and nothing else
+            rospy.loginfo(target_list)
             
             # --- THIS IS WHERE YOUR CONTROL LOGIC GOES ---
-            # if my_address == 22 and target_address == 2:
-            #     if heading_error > 5.0:
+            # Now 'target_list' is a perfect Python list of lists ready to be used!
+            # Example: 
+            # for target in target_list:
+            #     if target[0] == 22 and target[2] > 5.0:
             #         turn_left()
             # ---------------------------------------------
 
