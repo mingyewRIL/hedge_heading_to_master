@@ -5,6 +5,9 @@ import rospy
 # (Assuming your package is still named 'hedge_heading_to_master')
 from hedge_heading_to_master.msg import FleetHeadingDistances
 
+# Set this to the ID of the drone this script is running on
+drone_ID = 2
+
 def fleet_callback(msg):
     """
     This function runs every time a new message arrives on the topic.
@@ -21,8 +24,9 @@ def fleet_callback(msg):
                 target_address = drone.other_addresses[i]
                 distance = round(drone.distances_to_others[i], 3)
                 heading_error = round(drone.heading_error_to_others_deg[i], 3)
+                other_heading_wrt_drone = round(drone.other_heading_with_respect_to_drone_deg[i], 3)
 
-                target_list.append([target_address, distance, heading_error])
+                target_list.append([target_address, distance, heading_error, other_heading_wrt_drone])
 
             # 4. Print EXACTLY the array and nothing else
             rospy.loginfo(target_list)
