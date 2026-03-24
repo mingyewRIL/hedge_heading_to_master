@@ -5,9 +5,6 @@ import rospy
 # (Assuming your package is still named 'hedge_heading_to_master')
 from hedge_heading_to_master.msg import FleetHeadingDistances
 
-# Set this to the ID of the drone this script is running on
-drone_ID = 22
-
 def fleet_callback(msg):
     """
     This function runs every time a new message arrives on the topic.
