@@ -137,20 +137,26 @@ def main():
             others = [a for a in addresses if a != addr]
             dists = []
             heading_errors_deg = []
+            other_headings_wrt_drone_deg = []
             for other in others:
-                ox, oy, oz, _ = state_for_fleet[other]
+                ox, oy, oz, other_angle_deg = state_for_fleet[other]
                 dx = ox - x
                 dy = oy - y
                 dists.append(round(distance_xy((x, y), (ox, oy)), DECIMAL_PLACES))
                 global_angle_deg = math.degrees(math.atan2(dy, dx))
                 heading_error_deg = normalize_angle_deg(global_angle_deg - angle_deg)
                 heading_errors_deg.append(round(heading_error_deg, DECIMAL_PLACES))
+                # "other heading with respect to this drone":
+                # heading difference between other drone and this drone.
+                rel_other_heading_deg = normalize_angle_deg(other_angle_deg - angle_deg)
+                other_headings_wrt_drone_deg.append(round(rel_other_heading_deg, DECIMAL_PLACES))
 
             dhd = DroneHeadingDistances()
             dhd.address = addr
             dhd.other_addresses = others
             dhd.distances_to_others = dists
             dhd.heading_error_to_others_deg = heading_errors_deg
+            dhd.other_heading_with_respect_to_drone_deg = other_headings_wrt_drone_deg
             fleet.drones.append(dhd)
 
         pub.publish(fleet)
