@@ -1,7 +1,7 @@
 <launch>
   <!-- Two paired mobile beacons: Master (21-22), Slave 1 (11-12). Marvelmind joint output per pair. -->
   <arg name="hedge_port" default="/dev/serial/by-id/usb-Marvelmind_Robotics_STM32_Virtual_ComPort_2088339D5246-if00"/>
-  <arg name="hedge_baud" default="9600"/>
+  <arg name="hedge_baud" default="115200"/>
 
   <node pkg="marvelmind_nav" type="hedge_rcv_bin" name="hedge_rcv_bin" output="screen"
         args="$(arg hedge_port) $(arg hedge_baud)"/>
@@ -12,6 +12,6 @@
     <param name="fleet_heading_distances_topic" value="fleet_heading_distances"/>
     <param name="publish_rate" value="10"/>
     <param name="frame_id" value="marvelmind"/>
-    <param name="hedge_pairs" value="22:21,22 2:1,2"/>
+    <param name="hedge_pairs" value="22:21,22 20:10,20 2:1,2"/>
   </node>
 </launch>
