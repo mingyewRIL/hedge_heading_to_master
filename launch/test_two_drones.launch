@@ -12,6 +12,6 @@
     <param name="fleet_heading_distances_topic" value="fleet_heading_distances"/>
     <param name="publish_rate" value="10"/>
     <param name="frame_id" value="marvelmind"/>
-    <param name="hedge_pairs" value="22:21,22 20:10,20 2:1,2"/>
+    <param name="hedge_pairs" value="22:21,22 20:10,20 2:1,2 5:4,5 13:6,13"/>
   </node>
 </launch>

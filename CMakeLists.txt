@@ -11,7 +11,9 @@ find_package(catkin REQUIRED COMPONENTS
 add_message_files(
   FILES
   DroneHeadingDistances.msg
+  DroneHeadingDistancesDebug.msg
   FleetHeadingDistances.msg
+  FleetHeadingDistancesDebug.msg
 )
 
 generate_messages(

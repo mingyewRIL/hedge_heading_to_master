@@ -12,6 +12,7 @@ Each message carries one hedgehog update: `address`, `x_m`, `y_m`, `z_m`, `angle
 ## Output
 
 - **Topic:** `fleet_heading_distances` (`hedge_heading_to_master/FleetHeadingDistances`)
+- **Debug Topic:** `fleet_heading_distances_debug` (`hedge_heading_to_master/FleetHeadingDistancesDebug`) with both filtered and raw arrays for comparison
 
 For each drone (by `address`), the message contains:
 
@@ -62,6 +63,7 @@ rosparam set /dummy_hedge_publisher/angle_deg 180
 ```
 
 Check output: `rostopic echo /fleet_heading_distances`
+Compare raw vs filtered: `rostopic echo /fleet_heading_distances_debug`
 
 ### Test with two real drones (Master 21–22, Slave 1: 11–12)
 
@@ -88,12 +90,18 @@ rosrun hedge_heading_to_master hedge_heading_distances_node.py
 |-----------|---------|-------------|
 | `~hedge_pos_ang_topic` | `/hedge_pos_ang` | Input topic from Marvelmind |
 | `~fleet_heading_distances_topic` | `fleet_heading_distances` | Output topic |
+| `~fleet_heading_distances_debug_topic` | `fleet_heading_distances_debug` | Debug output topic (raw + filtered values). |
 | `~publish_rate` | 10 | Publish rate (Hz) |
 | `~frame_id` | `marvelmind` | Header frame_id for output |
 | `~hedge_pairs` | (empty) | Paired beacons: position = midpoint, heading from primary. e.g. `"22:21,22 12:11,12"` for Master (21–22) and Slave 1 (11–12). |
 | `~hedge_addresses` | (empty) | Comma-separated addresses when not using `~hedge_pairs`. |
 | `~primary_hedge_address` | -1 | Single joint address; used only if neither `~hedge_pairs` nor `~hedge_addresses` is set. |
 | `~dummy_address` | 99 | Always accept this address (dummy); use with test_with_dummy.launch. |
+| `~enable_kalman` | `true` | Enable/disable Kalman filtering before publish. |
+| `~kf_q_distance` | `0.02` | Process noise for distance filter (higher = more responsive, less smooth). |
+| `~kf_r_distance` | `0.2` | Measurement noise for distance filter (higher = smoother, more lag). |
+| `~kf_q_angle` | `0.5` | Process noise for angle filters (`heading_error`, `other_heading_with_respect_to_drone`). |
+| `~kf_r_angle` | `4.0` | Measurement noise for angle filters (higher = smoother, more lag). |
 
 ## Troubleshooting
 
